@@ -89,3 +89,4 @@ def new_listing(request):
     return render(request, "auctions/newlisting.html", {
         "form": NewListingForm()
     })
+    hhhhhhhfasdfsafsfs
