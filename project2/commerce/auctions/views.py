@@ -87,6 +87,5 @@ def new_listing(request):
             newlisting.save()      
             return render(request, "auctions/listing.html")
     return render(request, "auctions/newlisting.html", {
-        "form": NewListingForm()
+        "form": "noob"
     })
-    hhhhhhhfasdfsafsfs
