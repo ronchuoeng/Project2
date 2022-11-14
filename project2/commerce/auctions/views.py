@@ -71,12 +71,11 @@ class NewListingForm(forms.Form):
     description = forms.CharField(label="Description", widget=forms.Textarea)
     s_bid = forms.DecimalField(label="Starting Bid", max_digits=8, decimal_places=2, validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
     img = forms.URLField(label="Image")
-    category = forms.ModelMultipleChoiceField(label="Category", queryset=Category.objects.all() , widget=forms.Select())
+    category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
 
 def new_listing(request): 
     if request.method == "POST":
         form = NewListingForm(request.POST)
-         
         if form.is_valid():
             newlisting = New_listing(
                 title = form.cleaned_data["title"],
