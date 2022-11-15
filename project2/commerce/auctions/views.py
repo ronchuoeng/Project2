@@ -67,7 +67,7 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
-
+# Create the form of New Listing by user.
 class NewListingForm(forms.Form):
     title = forms.CharField(label="Title", max_length=64)
     description = forms.CharField(label="Description", widget=forms.Textarea)
@@ -75,7 +75,8 @@ class NewListingForm(forms.Form):
     img = forms.URLField(label="Image")
     category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
 
-def new_listing(request): 
+def new_listing(request):
+    # 1. Post the new listing by user. 
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
@@ -88,7 +89,11 @@ def new_listing(request):
             )
             newlisting.save()      
             return render(request, "auctions/listing.html")
-            
+        else:
+            return render(request, "auctions/newlisting.html", {
+                "form": form
+            })
+    # 2. GEt the page.       
     return render(request, "auctions/newlisting.html", {
         "form": NewListingForm()
     })

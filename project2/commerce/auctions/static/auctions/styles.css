@@ -17,9 +17,16 @@ body {
 
 .div_image {
     float:left;
-    width: 25%;
-    text-align: right;
-    margin-right: 100px;
-    margin-top: 25px;
+    width: 30%;
+    height:100%;
+    text-align: center;
 }
 
+.div_description {
+    float: left;
+    padding:20px;
+    width: 60%;
+    height: 100%;
+    text-align: left;
+    
+}
