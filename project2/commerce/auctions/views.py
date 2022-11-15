@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.core.validators import MinValueValidator,MaxValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import User, Listing, Category
 
@@ -76,7 +77,7 @@ class NewListingForm(forms.Form):
     category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
 
 def new_listing(request):
-    # 1. Post the new listing by user. 
+    # 1. POST the new listing by user. 
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
@@ -93,9 +94,17 @@ def new_listing(request):
             return render(request, "auctions/newlisting.html", {
                 "form": form
             })
-    # 2. GEt the page.       
+    # 2. GET the page.       
     return render(request, "auctions/newlisting.html", {
         "form": NewListingForm()
     })
 
-   
+
+def listing_page(request,listing_id):
+    try:
+        listing = Listing.objects.get(pk=listing_id)
+    except ObjectDoesNotExist:
+        return HttpResponse("The listing doesn't exist or has already expired.")
+    return render(request, "auctions/listing.html",{
+        "listing": listing 
+    })
