@@ -6,11 +6,13 @@ from django.urls import reverse
 from django import forms
 from django.core.validators import MinValueValidator,MaxValueValidator
 
-from .models import User, New_listing, Category
+from .models import User, Listing, Category
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        "listings": Listing.objects.all()
+    })
 
 
 def login_view(request):
@@ -77,7 +79,7 @@ def new_listing(request):
     if request.method == "POST":
         form = NewListingForm(request.POST)
         if form.is_valid():
-            newlisting = New_listing(
+            newlisting = Listing(
                 title = form.cleaned_data["title"],
                 description = form.cleaned_data["description"],
                 s_bid = form.cleaned_data["s_bid"],
@@ -90,3 +92,5 @@ def new_listing(request):
     return render(request, "auctions/newlisting.html", {
         "form": NewListingForm()
     })
+
+   

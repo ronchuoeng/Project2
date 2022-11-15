@@ -2,6 +2,21 @@
 
 {% block body %}
     <h2>Active Listings</h2>
-
+    <div>
+        {% for listing in listings %}
+            <div class="div_active_listing">
+                <div class="div_image">
+                    {% if listing.img %}
+                        <img src="{{ listing.img }}" height="250px">
+                    {% else %}
+                        No Image.
+                    {% endif %}
+                </div>
+                Listing {{ listing.id }}: {{ listing.title }} {{ listing.s_bid }} {{ listing.category }}
+            </div>
+        {% endfor %}
+    </div>
+fafsd
+    </div>
     TODO
 {% endblock %}

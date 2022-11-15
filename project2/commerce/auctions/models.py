@@ -11,7 +11,7 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.title}"
 
-class New_listing(models.Model):
+class Listing(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=1000)
     s_bid = models.DecimalField(max_digits=8, decimal_places=2)
