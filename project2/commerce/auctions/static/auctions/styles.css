@@ -15,18 +15,46 @@ body {
     border-radius:10px;
 }
 
-.div_image {
+.div_listing {
+    margin-bottom:10px;
+    width:100%;
+    height:700px;
+}
+
+.div_preview_image {
     float:left;
     width: 30%;
     height:100%;
     text-align: center;
 }
 
-.div_description {
+.div_listing_img {
+    padding-top: 20px;
     float: left;
-    padding:20px;
+    width: 40%;
+    height: 90%;
+    text-align: center;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.div_preview_list {
+    float: left;
+    padding: 20px;
     width: 60%;
     height: 100%;
     text-align: left;
-    
+}
+
+.div_listing_body {
+    float: left;
+    padding: 20px;
+    width: 50%;
+    height: 90%;
+    text-align: left;
+}
+.div_listing_information {
+    height: 60%;
+    width: 100%;
+    text-align: left;
 }

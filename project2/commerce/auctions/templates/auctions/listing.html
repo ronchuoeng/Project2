@@ -1,5 +1,26 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    {{ listing }}
+    <div class="div_listing">
+        <div class="div_listing_img">
+         {% if listing.img %}
+            <img src="{{ listing.img }}" style="min-width:80%;max-width:100%;min-height:80%;max-height:90%;">
+         {% else %}
+             No Image.
+         {% endif %}
+        </div>
+        <div class="div_listing_body">
+            <div class="div_listing_information">
+                <h1>{{ listing.title }}</h1>
+                <h4> S/B: ${{ listing.s_bid }}</h4>
+                <h4> C/O: ${{ listing.s_bid }}</h4>
+                <br>
+                <strong>Description:</strong><br>
+                {{ listing.description }}
+                <br>
+                <p style="color:rgb(181, 174, 174)">Category: {{ listing.category }}</p>
+            </div>
+        </div>
+    </div>
+    <hr>
 {% endblock %}
