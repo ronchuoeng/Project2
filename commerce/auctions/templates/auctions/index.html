@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <div>
+        {% for listing in listings %}
+            <div class="div_active_listing">
+                <div class="div_preview_image">
+                    {% if listing.img %}
+                        <img src="{{ listing.img }}" style="height:100%;max-width:100%">
+                    {% else %}
+                        No Image.
+                    {% endif %}
+                </div>
+
+                <div class="div_preview_list">
+                    Listing {{ listing.id }}:<br>
+                    <h5> {{ listing.title }} </h5>
+                    <h6> <strong>Price:</strong> ${{ listing.s_bid }} </h6> 
+                    {{ listing.description }} <br>
+                    Category: {{ listing.category }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+fafsd
+    </div>
+    TODO
+{% endblock %}
