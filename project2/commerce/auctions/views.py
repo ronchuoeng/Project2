@@ -108,3 +108,15 @@ def listing_page(request,listing_id):
     return render(request, "auctions/listing.html",{
         "listing": listing 
     })
+
+class BiddingForm(forms.Form):
+    bid = forms.DecimalField(label="C/O:", max_digits=8, decimal_places=2 validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
+
+
+def bid(request,listing_id):
+    if request.method == "POST":
+        form = BiddingForm(request.POST)
+        if form.is_valid:
+            bid = form.cleaned_data[request.POST["bid"]]
+            s_bid = Listing.objects.get(pk=listing_id).s_bid
+            c_off = Listing.objects.get(pk=listing_id).
