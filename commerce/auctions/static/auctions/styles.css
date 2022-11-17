@@ -27,6 +27,9 @@ body {
     height:100%;
     text-align: center;
 }
+.div_preview_image:hover {
+    background-color: #ccc;
+}
 
 .div_listing_img {
     padding-top: 20px;
@@ -58,3 +61,4 @@ body {
     width: 100%;
     text-align: left;
 }
+

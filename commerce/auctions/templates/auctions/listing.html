@@ -4,9 +4,9 @@
     <div class="div_listing">
         <div class="div_listing_img">
          {% if listing.img %}
-            <img src="{{ listing.img }}" style="min-width:80%;max-width:100%;min-height:50%;max-height:90%;">
+            <img src="{{ listing.img }}" alt="{{ listing.title }}" style="min-width:80%;max-width:100%;min-height:50%;max-height:90%;">
          {% else %}
-             No Image.
+            No Image.
          {% endif %}
         </div>
         <div class="div_listing_body">
@@ -15,7 +15,7 @@
                 <h4> S/B: ${{ listing.s_bid }}</h4>
                 {% if listing.c_off %}
                     <h4> C/O: ${{ listing.c_off.bid_price }}</h4>
-                    {% if listing.c_off.bidder == request.user  %}
+                    {% if listing.c_off.bidder == request.user %}
                         (You are the highest bid.)
                     {% endif %}
                 {% else %}
@@ -29,13 +29,19 @@
                 <p>Listed by: {{ listing.seller }} </p>
             </div>
             <div>
-                <form action="{% url 'bidding' listing.id %}" method="post">
-                    {% csrf_token %}
-                    {{ bidding }}
-                    <input type="submit" value="Place Bid">
-                </form>
-                {% if message %}
-                    <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                <!-- Seller's page -->
+                {% if listing.seller == request.user %}
+                    <!-- close auction here !!!!! TO DO-->
+                {% else %}
+                <!-- Others' page -->
+                    <form action="{% url 'bidding' listing.id %}" method="post">
+                        {% csrf_token %}
+                        {{ bidding }}
+                        <input type="submit" value="Place Bid">
+                    </form>
+                    {% if message %}
+                        <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

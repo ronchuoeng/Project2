@@ -4,15 +4,15 @@
     <h2>Active Listings</h2>
     <div>
         {% for listing in listings %}
-            <div class="div_active_listing">
+            <a href="{% url 'listing' listing.id %}"><div class="div_active_listing">
                 <div class="div_preview_image">
                     {% if listing.img %}
-                        <img src="{{ listing.img }}" style="height:100%;max-width:100%">
+                        <img src="{{ listing.img }}" alt="{{ listing.title }}" style="height:100%;max-width:100%">
                     {% else %}
                         No Image.
                     {% endif %}
                 </div>
-
+            </a>
                 <div class="div_preview_list">
                     Listing {{ listing.id }}:<br>
                     <h5> {{ listing.title }} </h5>
