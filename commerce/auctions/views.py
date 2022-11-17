@@ -7,7 +7,7 @@ from django import forms
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import User, Listing, Category
+from .models import User, Listing, Category, Bidding
 
 
 def index(request):
@@ -106,6 +106,63 @@ def listing_page(request,listing_id):
         listing = Listing.objects.get(pk=listing_id)
     except ObjectDoesNotExist:
         return HttpResponse("The listing doesn't exist or has already expired.")
-    return render(request, "auctions/listing.html",{
-        "listing": listing 
+    return render(request, ("auctions/listing.html"), {
+        "listing": listing,
+        "bidding": PlaceBidForm()
     })
+    
+
+
+class PlaceBidForm(forms.Form):
+    bid = forms.DecimalField(label="Place Bid", max_digits=8, decimal_places=2, validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
+
+
+def bidding(request,listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        form = PlaceBidForm(request.POST)
+        if form.is_valid():
+            bidding = Bidding(bidder=request.user, bid_price=form.cleaned_data["bid"])
+            if listing.c_off == None:
+                if bidding.bid_price >= listing.s_bid:
+                    listing.c_off = bidding
+                else:
+                    return render(request, "auctions/listing.html", {
+                        "listing": listing,
+                        "bidding": form,
+                        "message": "Your bid should higher than the Starting Bid/Current Offer."
+                    })
+            else: 
+                if bidding.bid_price > listing.c_off.bid_price:
+                    listing.c_off = bidding
+                else:
+                    return render(request, "auctions/listing.html", {
+                        "listing": listing,
+                        "bidding": form,
+                        "message": "Your bid should higher than the Starting Bid/Current Offer."
+                    })
+            bidding.save()
+            listing.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)),{
+            "message": f"You have successfully bid the item for ${listing.c_off.bid_price}."
+        })
+
+    """    if listing.c_off == None:
+            if form.bid >= listing.s_bid:
+                    listing.c_off.bid_price = form.bid
+            else:
+                return render(reverse("listing_page", args=(listing.id)),{
+                    "message": "Your bid should higher than the Starting Bid/Current Offer."
+                })
+        else:
+            if form.bid >= listing.s_bid and form.bid > listing.c_off.bid_price:
+                listing.c_off.bid_price = form.bid
+            else:
+                return HttpResponseRedirect(reverse("listing_page", args=(listing.id)),{
+                    "message": "Your bid should higher than the Starting Bid/Current Offer."
+                })
+            
+        return render(reverse("listing_page", args=(listing.id)),{
+            "message": f"You have successfully bid the item for ${form.bid}."
+        })
+        """

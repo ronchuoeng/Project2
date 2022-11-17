@@ -13,13 +13,30 @@
             <div class="div_listing_information">
                 <h1>{{ listing.title }}</h1>
                 <h4> S/B: ${{ listing.s_bid }}</h4>
-                <h4> C/O: ${{ listing.s_bid }}</h4>
+                {% if listing.c_off %}
+                    <h4> C/O: ${{ listing.c_off.bid_price }}</h4>
+                    {% if listing.c_off.bidder == request.user  %}
+                        (You are the highest bid.)
+                    {% endif %}
+                {% else %}
+                    {{ empty }}
+                {% endif %}
                 <br>
                 <strong>Description:</strong><br>
                 {{ listing.description }}
                 <br>
                 <p style="color:rgb(181, 174, 174)">Category: {{ listing.category }}</p>
                 <p>Listed by: {{ listing.seller }} </p>
+            </div>
+            <div>
+                <form action="{% url 'bidding' listing.id %}" method="post">
+                    {% csrf_token %}
+                    {{ bidding }}
+                    <input type="submit" value="Place Bid">
+                </form>
+                {% if message %}
+                    <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                {% endif %}
             </div>
         </div>
     </div>
