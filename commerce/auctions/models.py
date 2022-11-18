@@ -28,6 +28,7 @@ class Listing(models.Model):
     img = models.URLField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="categories")
     seller = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sellers")
+    active = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.title}"
