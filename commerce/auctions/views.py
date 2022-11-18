@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -76,6 +77,7 @@ class NewListingForm(forms.Form):
     img = forms.URLField(label="Image")
     category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
 
+
 def new_listing(request):
     # 1. POST the new listing by user. 
     if request.method == "POST":
@@ -117,6 +119,7 @@ class PlaceBidForm(forms.Form):
     bid = forms.DecimalField(label="Place Bid", max_digits=8, decimal_places=2, validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
 
 
+@login_required(login_url="login")
 def bidding(request,listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
@@ -146,23 +149,3 @@ def bidding(request,listing_id):
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)),{
             "message": f"You have successfully bid the item for ${listing.c_off.bid_price}."
         })
-
-    """    if listing.c_off == None:
-            if form.bid >= listing.s_bid:
-                    listing.c_off.bid_price = form.bid
-            else:
-                return render(reverse("listing_page", args=(listing.id)),{
-                    "message": "Your bid should higher than the Starting Bid/Current Offer."
-                })
-        else:
-            if form.bid >= listing.s_bid and form.bid > listing.c_off.bid_price:
-                listing.c_off.bid_price = form.bid
-            else:
-                return HttpResponseRedirect(reverse("listing_page", args=(listing.id)),{
-                    "message": "Your bid should higher than the Starting Bid/Current Offer."
-                })
-            
-        return render(reverse("listing_page", args=(listing.id)),{
-            "message": f"You have successfully bid the item for ${form.bid}."
-        })
-        """
