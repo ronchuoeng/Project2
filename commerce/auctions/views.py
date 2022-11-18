@@ -146,6 +146,4 @@ def bidding(request,listing_id):
                     })
             bidding.save()
             listing.save()
-        return HttpResponseRedirect(reverse("listing", args=(listing.id,)),{
-            "message": f"You have successfully bid the item for ${listing.c_off.bid_price}."
-        })
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
