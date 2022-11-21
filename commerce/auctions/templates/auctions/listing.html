@@ -28,20 +28,33 @@
                 <p style="color:rgb(181, 174, 174)">Category: {{ listing.category }}</p>
                 <p>Listed by: {{ listing.seller }} </p>
             </div>
-            <div>
+            <div class="div_listing_function">
                 <!-- Seller's page -->
                 {% if listing.seller == request.user %}
                     <!-- close auction here !!!!! TO DO-->
                 {% else %}
                 <!-- Others' page -->
+                <div class="div_place_bid">
                     <form action="{% url 'bidding' listing.id %}" method="post">
                         {% csrf_token %}
-                        {{ bidding }}
-                        <input type="submit" value="Place Bid">
+                        {{ bidding }}                       
+                        <input class="place_bid" type="submit" value="Place Bid">
                     </form>
-                    {% if message %}
-                        <p style="color:red;font-weight:bold;"> {{ message }} </p>
-                    {% endif %}
+                </div> 
+                <div class="div_watchlist">
+                    
+                    <form action="{% url 'watchlist' listing.id %}" method="post">
+                        {% csrf_token %}
+                        {% if request.user.id in watcher.user %}
+                            <input class="watchlist" type="submit" value="Remove Watchlist">
+                        {% else %}
+                            <input class="watchlist" type="submit" value="Add to Watchlist">
+                        {% endif %}
+                    </form>
+                </div>
+                {% if message %}
+                    <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                {% endif %}
                 {% endif %}
             </div>
         </div>

@@ -57,8 +57,41 @@ body {
     text-align: left;
 }
 .div_listing_information {
-    height: 60%;
+    min-height: 60%;
     width: 100%;
     text-align: left;
 }
 
+.div_listing_function {
+    width: 100%;
+    text-align: left;
+}
+.div_place_bid {
+    width: 60%;
+    height: 40px;
+    float: left;
+}
+
+.place_bid {
+    border: 1px solid white;
+    border-radius: 15px;
+    height: 30px;
+    width: 150px;
+    color: white;
+    background-color: #3498ca;
+}
+
+.div_watchlist {
+    width: 40%;
+    height: 40px;
+    float: left;
+}
+
+.watchlist {
+    border: 1px solid #0654ba;
+    border-radius: 15px;
+    height: 30px;
+    width: 150px;
+    color: #0654ba;;
+    background-color: white;
+}

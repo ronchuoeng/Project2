@@ -8,7 +8,7 @@ from django import forms
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import User, Listing, Category, Bidding
+from .models import User, Listing, Category, Bidding, Watchlist
 
 
 def index(request):
@@ -109,6 +109,7 @@ def listing_page(request,listing_id):
     except ObjectDoesNotExist:
         return HttpResponse("The listing doesn't exist or has already expired.")
     return render(request, ("auctions/listing.html"), {
+        "watcher": listing.watchlists.all(),
         "listing": listing,
         "bidding": PlaceBidForm()
     })
@@ -145,5 +146,22 @@ def bidding(request,listing_id):
                         "message": "Your bid should higher than the Starting Bid/Current Offer."
                     })
             bidding.save()
-            listing.save()
+            listing.save() 
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+@login_required(login_url="login")
+def watchlist(request,listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        user = User.objects.get(pk=request.user.id)
+        if Watchlist.objects.get(user=user):
+            watcher = Watchlist.objects.get(user=user)
+            if listing in watcher.listings.all():
+                watcher.listings.remove(listing)
+            else:
+                watcher.listings.add(listing)
+        else:
+            watcher = Watchlist.objects.create(user=user)
+            watcher.listings.add(listing)
+
+        return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
