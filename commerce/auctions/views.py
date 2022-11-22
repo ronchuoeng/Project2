@@ -108,11 +108,13 @@ def listing_page(request,listing_id):
         listing = Listing.objects.get(pk=listing_id)
     except ObjectDoesNotExist:
         return HttpResponse("The listing doesn't exist or has already expired.")
+    # If not login.
     if not request.user.is_authenticated:
         return render(request, ("auctions/listing.html"), {
             "listing": listing,
             "bidding": PlaceBidForm()
         }) 
+    # If login.
     user = User.objects.get(pk=request.user.id)
     # Display different watchlist button according to watchlist
     if user.watchers.exists():
