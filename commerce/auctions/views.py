@@ -183,4 +183,11 @@ def watchlist(request,listing_id):
             watcher.listings.add(listing)
 
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
-        
+
+
+def close_auction(request,listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        listing.active = False
+        listing.save()
+        return HttpResponseRedirect(reverse("listing", args=[listing.id,]))

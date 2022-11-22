@@ -29,32 +29,50 @@
                 <p>Listed by: {{ listing.seller }} </p>
             </div>
             <div class="div_listing_function">
-                <!-- Seller's page -->
                 {% if listing.seller == request.user %}
-                    <!-- close auction here !!!!! TO DO-->
+                    <!-- Seller's page -->
+                    <div class="div_place_bid">
+                        {% if listing.active == True %}
+                        <form action="{% url 'close_auction' listing.id %}" method="post">
+                            {% csrf_token %}
+                            <strong>Bidder:</strong> {{ listing.c_off.bidder }}<br>
+                            <strong>Bid:</strong> ${{listing.c_off.bid_price }}<br><br>
+                            <input class= "place_bid" type="submit" value="Close Auction">
+                        </form>
+                        {% else %}
+                        <p class="notice">You have closed the auction.</p>
+                        <p> Deal with {{ listing.c_off }}</p>
+                        {% endif %}
+                    </div>   
                 {% else %}
                 <!-- Others' page -->
-                <div class="div_place_bid">
-                    <form action="{% url 'bidding' listing.id %}" method="post">
-                        {% csrf_token %}
-                        {{ bidding }}                       
-                        <input class="place_bid" type="submit" value="Place Bid">
-                    </form>
-                </div> 
-                <div class="div_watchlist">
-                    
-                    <form action="{% url 'watchlist' listing.id %}" method="post">
-                        {% csrf_token %}
-                        {% if listing in watcher %}
-                            <input class="remove_watchlist" type="submit" value="Remove Watchlist">
-                        {% else %}
-                            <input class="add_watchlist" type="submit" value="Add to Watchlist">
-                        {% endif %}
-                    </form>
-                </div>
-                    {% if message %}
-                        <p style="color:red;font-weight:bold;"> {{ message }} </p>
-                    {% endif %}
+                    {% if listing.active == True %}
+                        <div class="div_place_bid">
+                            <form action="{% url 'bidding' listing.id %}" method="post">
+                                {% csrf_token %}
+                                {{ bidding }}                       
+                                <input class="place_bid" type="submit" value="Place Bid">
+                            </form>
+                        </div> 
+                        <div class="div_watchlist">
+                            <form action="{% url 'watchlist' listing.id %}" method="post">
+                                {% csrf_token %}
+                                {% if listing in watcher %}
+                                    <input class="remove_watchlist" type="submit" value="Remove Watchlist">
+                                {% else %}
+                                    <input class="add_watchlist" type="submit" value="Add to Watchlist">
+                                {% endif %}
+                            </form>
+                        </div>
+                            {% if message %}
+                                <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                            {% endif %}
+                    {% elif listing.c_off.bidder == request.user %}
+                        <p class="notice">Seller has ended the auction.</p>
+                        <p style="color:red;font-size:30px;font-weight:bold;">Congratulations, you are the Winner!</p>
+                    {% else %}
+                        <p class="notice">The listing is no longer active.</p>
+                    {% endif %}      
                 {% endif %}
             </div>
         </div>
