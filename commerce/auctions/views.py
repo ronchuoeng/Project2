@@ -183,3 +183,4 @@ def watchlist(request,listing_id):
             watcher.listings.add(listing)
 
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
+        
