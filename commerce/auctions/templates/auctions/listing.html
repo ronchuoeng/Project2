@@ -45,16 +45,16 @@
                     
                     <form action="{% url 'watchlist' listing.id %}" method="post">
                         {% csrf_token %}
-                        {% if request.user.id in watcher.user %}
-                            <input class="watchlist" type="submit" value="Remove Watchlist">
+                        {% if listing in watcher %}
+                            <input class="remove_watchlist" type="submit" value="Remove Watchlist">
                         {% else %}
-                            <input class="watchlist" type="submit" value="Add to Watchlist">
+                            <input class="add_watchlist" type="submit" value="Add to Watchlist">
                         {% endif %}
                     </form>
                 </div>
-                {% if message %}
-                    <p style="color:red;font-weight:bold;"> {{ message }} </p>
-                {% endif %}
+                    {% if message %}
+                        <p style="color:red;font-weight:bold;"> {{ message }} </p>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

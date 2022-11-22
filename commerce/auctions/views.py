@@ -108,12 +108,15 @@ def listing_page(request,listing_id):
         listing = Listing.objects.get(pk=listing_id)
     except ObjectDoesNotExist:
         return HttpResponse("The listing doesn't exist or has already expired.")
+    user = User.objects.get(pk=request.user.id)
+    # 1. Check the user has a watchlist or not, if has
+    if Watchlist.objects.get(user=user):
+        watcher = Watchlist.objects.get(user=user)
     return render(request, ("auctions/listing.html"), {
-        "watcher": listing.watchlists.all(),
+        "watcher": watcher.listings.all(),
         "listing": listing,
         "bidding": PlaceBidForm()
     })
-    
 
 
 class PlaceBidForm(forms.Form):
@@ -154,13 +157,16 @@ def watchlist(request,listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
         user = User.objects.get(pk=request.user.id)
+        # 1. Check the user has a watchlist or not, if has
         if Watchlist.objects.get(user=user):
             watcher = Watchlist.objects.get(user=user)
+            # The function to add or remove the listing watchlist.
             if listing in watcher.listings.all():
                 watcher.listings.remove(listing)
             else:
                 watcher.listings.add(listing)
         else:
+        # 2. If no, Create a watchlist for user, then add the listing to watchlist.
             watcher = Watchlist.objects.create(user=user)
             watcher.listings.add(listing)
 

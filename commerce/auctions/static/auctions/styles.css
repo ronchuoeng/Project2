@@ -87,11 +87,20 @@ body {
     float: left;
 }
 
-.watchlist {
+.add_watchlist {
     border: 1px solid #0654ba;
     border-radius: 15px;
     height: 30px;
     width: 150px;
-    color: #0654ba;;
+    color: #0654ba;
     background-color: white;
+}
+
+.remove_watchlist {
+    border: 1px solid #0654ba;
+    border-radius: 15px;
+    height: 30px;
+    width: 150px;
+    color: white;
+    background-color: #0654ba;
 }
