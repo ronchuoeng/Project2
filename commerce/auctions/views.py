@@ -8,7 +8,7 @@ from django import forms
 from django.core.validators import MinValueValidator,MaxValueValidator
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import User, Listing, Category, Bidding, Watchlist
+from .models import User, Listing, Category, Bidding, Watchlist, Comment
 
 
 def index(request):
@@ -72,7 +72,7 @@ def register(request):
 # Create the form of New Listing by user.
 class NewListingForm(forms.Form):
     title = forms.CharField(label="Title", max_length=64)
-    description = forms.CharField(label="Description", widget=forms.Textarea)
+    description = forms.CharField(label="Description",max_length=1000, widget=forms.Textarea)
     s_bid = forms.DecimalField(label="Starting Bid", max_digits=8, decimal_places=2, validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
     img = forms.URLField(label="Image")
     category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
@@ -108,11 +108,13 @@ def listing_page(request,listing_id):
         listing = Listing.objects.get(pk=listing_id)
     except ObjectDoesNotExist:
         return HttpResponse("The listing doesn't exist or has already expired.")
+    comments = Comment.objects.filter(listing=listing)
     # If not login.
     if not request.user.is_authenticated:
         return render(request, ("auctions/listing.html"), {
             "listing": listing,
-            "bidding": PlaceBidForm()
+            "bidding": PlaceBidForm(),
+            "comments": comments
         }) 
     # If login.
     user = User.objects.get(pk=request.user.id)
@@ -122,12 +124,14 @@ def listing_page(request,listing_id):
         return render(request, ("auctions/listing.html"), {
             "watcher": watcher.listings.all(),
             "listing": listing,
-            "bidding": PlaceBidForm()
+            "bidding": PlaceBidForm(),
+            "comments": comments
         })
     else:
         return render(request, ("auctions/listing.html"), {
             "listing": listing,
-            "bidding": PlaceBidForm()
+            "bidding": PlaceBidForm(),
+            "comments": comments
         })
 
 
@@ -136,12 +140,15 @@ class PlaceBidForm(forms.Form):
 
 
 @login_required(login_url="login")
-def bidding(request,listing_id):
+def bidding(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
         form = PlaceBidForm(request.POST)
         if form.is_valid():
-            bidding = Bidding(bidder=request.user, bid_price=form.cleaned_data["bid"])
+            bidding = Bidding(
+                bidder=request.user, 
+                bid_price=form.cleaned_data["bid"]
+                )
             if listing.c_off == None:
                 if bidding.bid_price >= listing.s_bid:
                     listing.c_off = bidding
@@ -165,7 +172,7 @@ def bidding(request,listing_id):
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 @login_required(login_url="login")
-def watchlist(request,listing_id):
+def watchlist(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
         user = User.objects.get(pk=request.user.id)
@@ -185,9 +192,27 @@ def watchlist(request,listing_id):
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
 
 
-def close_auction(request,listing_id):
+def close_auction(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
         listing.active = False
         listing.save()
+
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
+
+
+
+@login_required(login_url="login")
+def comment(request, listing_id):
+    if request.method == "POST":
+        listing = Listing.objects.get(pk=listing_id)
+        user = User.objects.get(pk=request.user.id)
+        new_comment = Comment(
+            listing=listing, 
+            user=user, 
+            comment=request.POST["comment"]
+            )
+        new_comment.save()
+            
+        return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
+

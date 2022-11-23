@@ -71,7 +71,7 @@
                             {% endif %}
                     {% elif listing.c_off.bidder == request.user %}
                         <p class="notice">Seller has ended the auction.</p>
-                        <p style="color:red;font-size:30px;font-weight:bold;">Congratulations, you are the Winner!</p>
+                        <p style="color:red;font-size:30px;font-weight:bold;">Congratulations, you are the Winner!</p>                   
                     {% else %}
                         <p class="notice">The listing is no longer active.</p>
                     {% endif %}      
@@ -80,4 +80,34 @@
         </div>
     </div>
     <hr>
+    <div class="div_comment">
+        <!-- Heading -->
+        <div>
+            <h4>Comments</h4>
+        </div>
+        <!-- Comments-->
+        {% for comment in comments %}
+            <div class="div_comment_all">
+                <div class="div_comment_user">
+                    {{ comment.user }}
+                </div>
+                <div class="div_comment_body">
+                    {{ comment.comment }}
+                </div>
+            </div>
+        {% endfor %}
+        <!-- Function that add the new comment-->
+        <div class="div_comment_add">
+            <form action="{% url 'comment' listing.id %}" method="post">
+                {% csrf_token %}
+                <div class="div_comment_add_user"> 
+                    {{ request.user }}:
+                </div>
+                <div class="div_comment_add_body">
+                    <textarea name="comment" rows="6" cols="100"></textarea>
+                    <input class="place_bid" type="submit" value="Comment">
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
