@@ -39,3 +39,12 @@ class Watchlist(models.Model):
 
     def __str__(self):
         return f"{self.user}"
+
+
+class Comment(models.Model):
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commentators")
+    comment = models.TextField(max_length=1000)
+
+    def __str__(self):
+        return f"{self.listing}"

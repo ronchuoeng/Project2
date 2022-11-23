@@ -12,21 +12,23 @@
         <div class="div_listing_body">
             <div class="div_listing_information">
                 <h1>{{ listing.title }}</h1>
-                <h4> S/B: ${{ listing.s_bid }}</h4>
+                <h4> S/B: ${{ listing.s_bid }} </h4>
                 {% if listing.c_off %}
-                    <h4> C/O: ${{ listing.c_off.bid_price }}</h4>
+                    <h4>C/O: ${{ listing.c_off.bid_price }}</h4>
                     {% if listing.c_off.bidder == request.user %}
-                        (You are the highest bid.)
+                        <p style="color:Red;font-weight:bold;">(You are the highest bid.)</p>
                     {% endif %}
                 {% else %}
                     {{ empty }}
                 {% endif %}
                 <br>
-                <strong>Description:</strong><br>
-                {{ listing.description }}
-                <br>
-                <p style="color:rgb(181, 174, 174)">Category: {{ listing.category }}</p>
-                <p>Listed by: {{ listing.seller }} </p>
+                <h5>Description:</h5>
+                    {{ listing.description }}
+                <h5>Details:</h5>
+                <ul>
+                    <li>Category: {{ listing.category }}</li>
+                    <li>Listed by: {{ listing.seller }}</li>
+                </ul>
             </div>
             <div class="div_listing_function">
                 {% if listing.seller == request.user %}

@@ -58,8 +58,10 @@ body {
 }
 .div_listing_information {
     min-height: 60%;
+    max-height: 80%;
     width: 100%;
     text-align: left;
+    overflow: scroll;
 }
 
 .div_listing_function {
