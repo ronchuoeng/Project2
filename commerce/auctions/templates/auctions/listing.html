@@ -89,7 +89,8 @@
         {% for comment in comments %}
             <div class="div_comment_all">
                 <div class="div_comment_user">
-                    {{ comment.user }}
+                    {{ comment.user }} 
+                    <p style="color:grey;"> {{ comment.date }} </p>
                 </div>
                 <div class="div_comment_body">
                     {{ comment.comment }}
