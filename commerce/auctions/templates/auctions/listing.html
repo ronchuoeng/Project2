@@ -86,17 +86,17 @@
             <h4>Comments</h4>
         </div>
         <!-- Comments-->
-        {% for comment in comments %}
             <div class="div_comment_all">
-                <div class="div_comment_user">
-                    {{ comment.user }} 
-                    <p style="color:grey;"> {{ comment.date }} </p>
-                </div>
-                <div class="div_comment_body">
-                    {{ comment.comment }}
-                </div>
+                {% for comment in comments %}
+                    <div class="div_comment_user">
+                        {{ comment.user }} 
+                        <p style="color:grey;"> {{ comment.date }} </p>
+                    </div>
+                    <div class="div_comment_body">
+                        {{ comment.comment }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
         <!-- Function that add the new comment-->
         <div class="div_comment_add">
             <form action="{% url 'comment' listing.id %}" method="post">

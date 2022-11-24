@@ -129,26 +129,25 @@ body {
 }
 
 .div_comment_all {
-    max-height: 70%;
+    max-height: 490px;
     overflow: scroll;
 }
 
 .div_comment_user {
     width: 20%;
-    height: 24%;
+    height: 117px;
     float: left;
     text-align: center;
-    background-color: white;
     border-right: 1px solid #ccc;
-    margin-bottom: 1%;
+    margin-bottom: 5px;
 }
 
 .div_comment_body {
     width: 80%;
-    height: 25%;
+    height: 117px;
     padding-left: 1%;
     float: left;
-    margin-bottom: 1%;
+    margin-bottom: 5px;
 }
 
 .div_comment_add {
