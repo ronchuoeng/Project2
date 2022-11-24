@@ -192,6 +192,20 @@ def watchlist(request, listing_id):
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
 
 
+@login_required(login_url="login")
+def watchlist_view(request):
+    user = User.objects.get(pk=request.user.id)
+    if user.watchers.exists():
+        # If user's have a watchlist
+        watchlist = Watchlist.objects.get(user=user)
+    else:
+        # If don't have
+        return HttpResponse("You don't have a watchlist yet.")
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watchlist.listings.all()
+    })
+
+
 def close_auction(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
@@ -199,7 +213,6 @@ def close_auction(request, listing_id):
         listing.save()
 
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
-
 
 
 @login_required(login_url="login")

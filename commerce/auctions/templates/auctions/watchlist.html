@@ -1,0 +1,45 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<h2>Watchlist</h2>
+    <!-- Div for the whole list -->
+    <div>
+        {% for listing in watchlist %}  
+        <!-- Check listing status  -->
+            {% if listing.active == True %}
+            <!-- 1. Still active-->
+            <div class="div_active_listing">
+            {% elif listing.c_off.bidder == request.user %}
+            <!-- 2. User win the bidding-->
+            <div class="div_active_listing" style="background-color:rgba(160, 244, 160, 0.37)">
+            {% else %}
+            <!-- 3. Others win the bidding-->
+            <div class="div_active_listing" style="background-color:rgba(204, 204, 204, 0.571);">
+            {% endif %}
+    <!-- Add the listing link to the image area -->
+            <a href="{% url 'listing' listing.id %}">
+                <div class="div_preview_image">
+    <!-- Check the image's url provided or not-->
+                    {% if listing.img %}
+                        <img src="{{ listing.img }}" alt="{{ listing.title }}" style="height:100%;max-width:100%">
+                    {% else %}
+                        No Image.
+                    {% endif %}
+                </div> 
+            </a>
+                <div class="div_preview_list">
+    <!-- Listing preview information -->
+                    Listing {{ listing.id }}:
+                    <h5> 
+                        {{ listing.title }} 
+                    </h5>
+                    <h6>
+                        <strong>Price:</strong> ${{ listing.c_off.bid_price }} 
+                    </h6> 
+                    <p>{{ listing.description }} </p>
+                     Category: {{ listing.category }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -3,6 +3,7 @@
 {% block body %}
     <div class="div_listing">
         <div class="div_listing_img">
+        <!-- Listing's Image-->
          {% if listing.img %}
             <img src="{{ listing.img }}" alt="{{ listing.title }}" style="min-width:80%;max-width:100%;min-height:50%;max-height:90%;">
          {% else %}
@@ -10,6 +11,7 @@
          {% endif %}
         </div>
         <div class="div_listing_body">
+            <!-- Listing's information -->
             <div class="div_listing_information">
                 <h1>{{ listing.title }}</h1>
                 <h4> S/B: ${{ listing.s_bid }} </h4>
@@ -31,10 +33,12 @@
                 </ul>
             </div>
             <div class="div_listing_function">
+                <!--Display different details according to different users.-->
                 {% if listing.seller == request.user %}
                     <!-- Seller's page -->
                     <div class="div_place_bid">
                         {% if listing.active == True %}
+                        <!-- If active -->
                         <form action="{% url 'close_auction' listing.id %}" method="post">
                             {% csrf_token %}
                             <strong>Bidder:</strong> {{ listing.c_off.bidder }}<br>
@@ -42,21 +46,25 @@
                             <input class= "place_bid" type="submit" value="Close Auction">
                         </form>
                         {% else %}
-                        <p class="notice">You have closed the auction.</p>
-                        <p> Deal with {{ listing.c_off }}</p>
+                        <!-- If closed -->
+                            <p class="notice">You have closed the auction.</p>
+                            <p> Deal with {{ listing.c_off }}</p>
                         {% endif %}
                     </div>   
                 {% else %}
-                <!-- Others' page -->
+                    <!-- Others' page -->
                     {% if listing.active == True %}
+                    <!--1. If listing still activate -->
                         <div class="div_place_bid">
+                            <!-- function to place bid-->
                             <form action="{% url 'bidding' listing.id %}" method="post">
                                 {% csrf_token %}
                                 {{ bidding }}                       
                                 <input class="place_bid" type="submit" value="Place Bid">
                             </form>
                         </div> 
-                        <div class="div_watchlist">
+                        <div class="div_watchlist"> 
+                            <!-- function to add to or remove from watchlist-->                 
                             <form action="{% url 'watchlist' listing.id %}" method="post">
                                 {% csrf_token %}
                                 {% if listing in watcher %}
@@ -66,49 +74,65 @@
                                 {% endif %}
                             </form>
                         </div>
+                            <!-- Show error message if bidding is not larger than current offer-->
                             {% if message %}
                                 <p style="color:red;font-weight:bold;"> {{ message }} </p>
                             {% endif %}
                     {% elif listing.c_off.bidder == request.user %}
+                    <!--2. If listing has closed -->
+                        <!-- Winner's page-->
                         <p class="notice">Seller has ended the auction.</p>
                         <p style="color:red;font-size:30px;font-weight:bold;">Congratulations, you are the Winner!</p>                   
                     {% else %}
+                        <!-- Others' page-->
                         <p class="notice">The listing is no longer active.</p>
+                            <!-- Able to remove listing from watchlist. (irreversible)-->
+                            {% if listing in watcher %}
+                                <form action="{% url 'watchlist' listing.id %}" method="post">
+                                    {% csrf_token %}
+                                    <input class="remove_watchlist" type="submit" value="Remove Watchlist">
+                                </form>
+                            {% endif %}
                     {% endif %}      
                 {% endif %}
             </div>
         </div>
     </div>
-    <hr>
+        <hr>
     <div class="div_comment">
         <!-- Heading -->
         <div>
             <h4>Comments</h4>
         </div>
         <!-- Comments-->
-            <div class="div_comment_all">
-                {% for comment in comments %}
-                    <div class="div_comment_user">
-                        {{ comment.user }} 
-                        <p style="color:grey;"> {{ comment.date }} </p>
-                    </div>
-                    <div class="div_comment_body">
-                        {{ comment.comment }}
-                    </div>
-                {% endfor %}
-            </div>
+        <div class="div_comment_all">
+            {% for comment in comments %}
+                <div class="div_comment_user">
+                    {{ comment.user }} 
+                    <p style="color:grey;"> {{ comment.date }} </p>
+                </div>
+                <div class="div_comment_body">
+                    {{ comment.comment }}
+                </div>
+            {% endfor %}
         <!-- Function that add the new comment-->
         <div class="div_comment_add">
-            <form action="{% url 'comment' listing.id %}" method="post">
-                {% csrf_token %}
-                <div class="div_comment_add_user"> 
-                    {{ request.user }}:
-                </div>
-                <div class="div_comment_add_body">
-                    <textarea name="comment" rows="6" cols="100"></textarea>
-                    <input class="place_bid" type="submit" value="Comment">
-                </div>
-            </form>
+            {% if request.user.is_authenticated %}
+                <form action="{% url 'comment' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="div_comment_add_user"> 
+                        {{ request.user }}:
+                    </div>
+                    <div class="div_comment_add_body">
+                        <textarea name="comment" rows="6" cols="100"></textarea>
+                        <input class="place_bid" type="submit" value="Comment">
+                    </div>
+                </form>
+            {% else %}
+                <p style="text-align:center;">Want to add a comment?
+                    <a href="{% url 'login' %}">Login here.</a>
+                </p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

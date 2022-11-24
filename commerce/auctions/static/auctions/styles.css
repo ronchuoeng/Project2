@@ -47,6 +47,7 @@ body {
     width: 60%;
     height: 100%;
     text-align: left;
+    overflow: scroll;
 }
 
 .div_listing_body {
@@ -131,6 +132,7 @@ body {
 .div_comment_all {
     max-height: 490px;
     overflow: scroll;
+    border-bottom: 1px solid #ccc;
 }
 
 .div_comment_user {
@@ -153,7 +155,7 @@ body {
 .div_comment_add {
     height: 25%;
     width: 100%;
-    border-top: 1px solid #ccc;
+    padding-top: 10px;
 }
 
 .div_comment_add_user {
