@@ -205,7 +205,7 @@ def watchlist_view(request):
         "watchlist": watchlist.listings.all()
     })
 
-
+       
 def close_auction(request, listing_id):
     if request.method == "POST":
         listing = Listing.objects.get(pk=listing_id)
