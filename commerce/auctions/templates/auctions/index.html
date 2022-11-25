@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>Active Listings {% block category %}{% endblock %}</h2>
     <!-- Div for the whole list -->
     <div>
         {% for listing in listings %}

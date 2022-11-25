@@ -74,8 +74,8 @@ class NewListingForm(forms.Form):
     title = forms.CharField(label="Title", max_length=64)
     description = forms.CharField(label="Description",max_length=1000, widget=forms.Textarea)
     s_bid = forms.DecimalField(label="Starting Bid", max_digits=8, decimal_places=2, validators=[MinValueValidator(0.05),MaxValueValidator(99999999)])
-    img = forms.URLField(label="Image")
-    category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all() , widget=forms.Select())
+    img = forms.URLField(label="ImageUrl", initial="https://")
+    category = forms.ModelChoiceField(label="Category", required=False, queryset=Category.objects.all().order_by('title'), widget=forms.Select())
 
 
 def new_listing(request):
@@ -229,3 +229,20 @@ def comment(request, listing_id):
             
         return HttpResponseRedirect(reverse("listing", args=[listing.id,]))
 
+
+def categories(request):
+    categories = Category.objects.all().order_by('title')
+
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+
+def category(request,category_id):
+    category = Category.objects.get(pk=category_id)
+    listing = Listing.objects.filter(category=category)
+
+    return render(request, "auctions/category.html", {
+        "category": category,
+        "listings": listing
+    })

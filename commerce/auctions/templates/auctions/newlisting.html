@@ -4,12 +4,13 @@
     <h2>Create New Listing</h2>
     <form action="{% url 'newlisting' %}" method="post">
         {% csrf_token %}
-    <div>
+    <div style="margin-top:20px;margin-left:50px;">
         {% for f in form %}
         <div class="divlabel">{{ f.label }} </div><div>{{ f }}</div>
-        {% endfor %}
         <br>
-        <input type="submit" value="Create">
+        {% endfor %}
+        <input style="background-color: #007bff;color:white;border-radius: 15px;border: 5px solid #007bff;"
+         type="submit" value="Create New Listing">
     </div>
     </form>
 {% endblock %}

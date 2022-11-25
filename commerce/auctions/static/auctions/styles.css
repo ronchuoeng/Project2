@@ -170,3 +170,23 @@ body {
     text-align: right;
     margin-bottom: 20px;
 }
+
+.container {
+    display: grid;
+    padding: 20px;
+    grid-column-gap: 20px; 
+    grid-row-gap: 10px;
+    grid-template-columns: auto auto auto;
+}
+.container > a > div {
+    background-color: #3498ca;
+    border-radius: 15px;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.container > a > div:hover {
+    background-color: #0654ba;
+}
