@@ -23,9 +23,15 @@
     <!-- Listing preview information -->
                     Listing {{ listing.id }}:
                     <h5> {{ listing.title }} </h5>
-                    <h6> <strong>Price:</strong> ${{ listing.c_off.bid_price }} </h6> 
-                    {{ listing.description }} <br>
-                    Category: {{ listing.category }}
+                    <h6> <strong>Price:</strong>
+                        {% if listing.c_off %}
+                            ${{ listing.c_off.bid_price }} 
+                        {% else %} 
+                            ${{ listing.s_bid }}   
+                        {% endif %}
+                    </h6>         
+                        {{ listing.description }} <br>
+                        Category: {{ listing.category }}
                 </div>
             </div>
           {% endif %}

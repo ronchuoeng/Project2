@@ -92,7 +92,7 @@ def new_listing(request):
                 seller = request.user
             )
             newlisting.save()      
-            return render(request, "auctions/listing.html")
+            return HttpResponseRedirect(reverse("listing", args=(newlisting.id,)))
         else:
             return render(request, "auctions/newlisting.html", {
                 "form": form
