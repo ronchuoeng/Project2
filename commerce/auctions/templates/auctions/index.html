@@ -1,8 +1,8 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
-    <!-- Div for the Macro List -->
+    <h2>Active Listings {% block category %}{% endblock %}</h2>
+    <!-- Div for the whole list -->
     <div>
         {% for listing in listings %}
     <!-- Display the Active Listing only -->     
@@ -21,11 +21,17 @@
             </a>
                 <div class="div_preview_list">
     <!-- Listing preview information -->
-                    Listing {{ listing.id }}:<br>
+                    Listing {{ listing.id }}:
                     <h5> {{ listing.title }} </h5>
-                    <h6> <strong>Price:</strong> ${{ listing.s_bid }} </h6> 
-                    {{ listing.description }} <br>
-                    Category: {{ listing.category }}
+                    <h6> <strong>Price:</strong>
+                        {% if listing.c_off %}
+                            ${{ listing.c_off.bid_price }} 
+                        {% else %} 
+                            ${{ listing.s_bid }}   
+                        {% endif %}
+                    </h6>         
+                        {{ listing.description }} <br>
+                        Category: {{ listing.category }}
                 </div>
             </div>
           {% endif %}
